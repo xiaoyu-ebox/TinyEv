@@ -8,9 +8,8 @@ lib_LTLIBRARIES = libTinyEv.la
 bin_PROGRAMS = TinyEv_daemon
 
 EXTRA_DIST = src/*.h
-libTinyEv_la_LDFLAGS = ${LDFLAGS} -shared -fPIC
 libTinyEv_la_CPPFLAGS = ${CXXFLAGS} -I ./src
-libTinyEv_la_LDFLAGS = -version-info $(VERSION_INFO)
+libTinyEv_la_LDFLAGS = ${LDFLAGS} -shared -fPIC -version-info $(VERSION_INFO)
 libTinyEv_la_SOURCES = src/Ev_Event.cpp src/Ev_Fifo.cpp src/Ev_Handle.cpp src/Ev_Vector.cpp \
 					src/Ev_SocketCli.cpp src/Ev_SocketSvr.cpp src/Ev_Stream.cpp \
 					src/Ev_IPCCli.cpp src/Ev_IPCSvr.cpp src/Ev_IPCSvrHandle.cpp \
