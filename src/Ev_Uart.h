@@ -62,11 +62,6 @@ protected: // api
 	virtual ev_error set_uart_attr(uart_db_t databits, uart_sb_t stopbits, uart_parity_t parity, uart_fc_t flow_ctrl);
 	virtual ev_error set_uart_vtime_vmin(uint8 time_100ms, uint8 min_char);
 
-
-	virtual ev_error on_ev_read() = 0;
-	virtual ev_error on_ev_write() {return EV_SUCCESS;}
-	virtual ev_error on_ev_error() {return EV_SUCCESS;}
-
 protected: // var
 
 private: // api

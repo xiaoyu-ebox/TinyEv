@@ -53,8 +53,6 @@ protected: // api
 	friend void ev_vector_connect_cb(struct ev_loop *loop, void *io, int events);
 	virtual void on_ev_connect(ev_error ret) = 0;
 	virtual ev_error on_ev_stream_read(uint32 size) = 0;
-	virtual ev_error on_ev_write() = 0;
-	virtual ev_error on_ev_error() = 0;
 
 protected: // var
 

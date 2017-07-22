@@ -53,10 +53,6 @@ protected: // api
 	 			 <=0：错误码，即ev_error的值前面加负号。
 	*****************************************************************************/
 	virtual ev_error on_ev_stream_read(uint32 size) = 0;
-	
-	virtual ev_error on_ev_write() = 0;
-
-	virtual ev_error on_ev_error() = 0;
 
 protected: // var
 

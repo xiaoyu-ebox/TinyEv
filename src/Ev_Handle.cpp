@@ -46,6 +46,25 @@ void Ev_Handle::deregister_handle_event()
 	return Ev_Vector::deregister_handle_event(this);
 }
 
+ev_error Ev_Handle::on_ev_read()
+{
+	EV_PRINTF_WARN("Default handler(%s).", __FUNCTION__);
+	return EV_SUCCESS;
+}
+
+
+ev_error Ev_Handle::on_ev_write()
+{
+	EV_PRINTF_WARN("Default handler(%s).", __FUNCTION__);
+	return EV_SUCCESS;
+}
+
+ev_error Ev_Handle::on_ev_error()
+{
+	EV_PRINTF_WARN("Default handler(%s).", __FUNCTION__);
+	return EV_SUCCESS;
+}
+
 ev_error Ev_Handle::write_data(uint8 *pdata, uint32 size)
 {
 	sint32 wsize = write(m_handle, pdata, size);

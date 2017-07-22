@@ -29,8 +29,6 @@ public: // api
 public: // var
 
 protected: // api
-	virtual ev_error on_ev_write() = 0;
-	virtual ev_error on_ev_error() = 0;
 	virtual ev_error on_ev_accept_malloc_cli(Ev_SocketCli **socket) = 0;
 	virtual ev_error on_ev_accept_buttom(Ev_SocketCli *socket) = 0;
 
@@ -39,8 +37,7 @@ protected: // var
 private: // api
 	ev_error listen_client_connect();
 	ev_error on_ev_accept();
-	ev_error on_ev_read() {return EV_SUCCESS;}
-	
+
 	friend void ev_vector_listen_cb(struct ev_loop *loop, void *io, int revents);
 private: // var
 	socket_type_t m_type;
