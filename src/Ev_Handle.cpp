@@ -28,12 +28,7 @@ Ev_Handle::Ev_Handle() :
 
 Ev_Handle::~Ev_Handle()
 {
-	if(m_handle != INVALID_HANDLE) {
-		close(m_handle);
-		m_handle = INVALID_HANDLE;
-
-		// 注销监听事件
-	}
+	deregister_handle_event();
 }
 
 ev_error Ev_Handle::register_handle_event(ev_type_t events, handle_type_t type)
@@ -51,7 +46,6 @@ ev_error Ev_Handle::on_ev_read()
 	EV_PRINTF_WARN("Default handler(%s).", __FUNCTION__);
 	return EV_SUCCESS;
 }
-
 
 ev_error Ev_Handle::on_ev_write()
 {

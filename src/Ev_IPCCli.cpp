@@ -89,7 +89,7 @@ ev_error Ev_IPCCli::ipc_write_data(uint8 *data, uint32 size)
 {
 	ev_error ret;
 	//EV_PRINTF_DBG_HEX(data, size);
-	EV_PRINTF_DBG("<-- %d", size);
+	//EV_PRINTF_DBG("<-- %d", size);
 
 	return write_data(data, size);
 }
@@ -100,7 +100,7 @@ ev_error Ev_IPCCli::on_ev_stream_read(uint32 size)
 	uint8 buffer[1024];	// TODO:缓冲大小根据消息的最大size
 	ipc_msg_info_t *ipc_msg = (ipc_msg_info_t *)buffer;
 
-	EV_PRINTF_DBG("--> %d", size);
+	//EV_PRINTF_DBG("--> %d", size);
 
 	while(1) {
 		// 试读msg头部信息

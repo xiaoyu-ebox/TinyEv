@@ -13,7 +13,7 @@
 /*----------------------------Head file----------------------------*/
 
 /*----------------------------macro file---------------------------*/
-#define ev_new(_type_, _count_)	(_type_ *)calloc(sizeof(_type_), _count_)
+#define ev_new(_type_, _count_)	(_type_ *)calloc(sizeof(_type_), (_count_))
 #define ev_free(_variable_)		free(_variable_)
 
 /*----------------------------type define--------------------------*/

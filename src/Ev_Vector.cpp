@@ -115,8 +115,10 @@ void Ev_Vector::deregister_handle_event(Ev_Handle *handle)
 		handle->m_watcher = NULL;
 	}
 
-	close(handle->m_handle);
-	handle->m_handle = INVALID_HANDLE;
+	if(handle->m_handle != INVALID_HANDLE) {
+		close(handle->m_handle);
+		handle->m_handle = INVALID_HANDLE;
+	}
 }
 
 ev_timer *Ev_Vector::register_timer_event(Ev_Timer *timer, ev_timer *watcher, double start, double repeat)

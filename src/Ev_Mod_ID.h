@@ -30,33 +30,6 @@
 #define SYSTEM_EVENT_RESUME			(MOD_ID_SYSTEM_BASE+3)		// 系统唤醒
 #define SYSTEM_EVENT_INPUT			(MOD_ID_SYSTEM_BASE+4)		// 系统按键
 
-
-
-// CUSTOMER（放到其它文件）
-#define WIFI_BASE					(MOD_ID_CUSTOMER_BASE+0x20)
-#define SCALE_BASE					(MOD_ID_CUSTOMER_BASE+0x30)
-#define RFID_BASE					(MOD_ID_CUSTOMER_BASE+0x40)
-#define ALARM_BASE					(MOD_ID_CUSTOMER_BASE+0x50)
-
-
-// wifi
-#define WIFI_UPDATE_STATE			(WIFI_BASE)
-#define WIFI_CONNECT_TO				(WIFI_BASE+1)
-#define WIFI_DISCONNECT				(WIFI_BASE+2)
-
-// scale
-#define SCALE_POWER_CTL				(SCALE_BASE)
-
-// rfid
-#define RFID_POWER_CTL				(RFID_BASE)
-#define RFID_SWIPE_CARD				(RFID_BASE+1)
-
-
-// alarm
-#define ALARM_MORNING				(ALARM_BASE)
-#define ALARM_NOON					(ALARM_BASE+1)
-#define ALARM_OTHER					(ALARM_BASE+2)
-
 /*----------------------------type define--------------------------*/
 typedef uint16 event_id_t;
 

@@ -32,7 +32,7 @@
 // 类型分段
 #define ERROR_BASE					0
 #define ERROR_DEV					50
-#define ERROR_EV					100
+#define ERROR_CUSTOMER				100
 
 /*----------------------------type define--------------------------*/
 typedef uint32				ev_error;
@@ -45,7 +45,7 @@ enum {
 	EV_ARGS_ERR,						// 参数错误
 	EV_ARGS_GET_ERR,					// 参数获取错误
 	EV_ARGS_SET_ERR,             		// 参数设置错误
-	EV_MEM_NO_ENOUGH,					// 内存不足
+	EV_NOMEM,							// 内存不足
 	EV_STAT_ERR,						// 状态错误
 	EV_OBJ_CREATE_ERR,					// 对象创建错误
 	EV_DATA_PARSE_ERR,					// 数据解析错误
@@ -69,6 +69,7 @@ enum {
 	EV_DEV_BUSY,						// 设备忙
 	EV_DEV_CONNECTING,					// 连接进行中
 	EV_DEV_CONNECT_ERR,					// 连接错误
+	EV_DEV_DISCONNECT,					// 连接断开
 	EV_DEV_BIND_ERR,					// 绑定错误
 	EV_DEV_LISTEN_ERR,					// listen错误
 	EV_DEV_ACCEPT_ERR,					// accpet错误
