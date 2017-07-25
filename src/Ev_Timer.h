@@ -16,6 +16,7 @@
 /*----------------------------macro file---------------------------*/
 
 /*----------------------------type define--------------------------*/
+typedef ev_timer	Obj_Timer;
 
 /*-----------------------------------------------------------------*/
 class Ev_Timer
@@ -23,10 +24,10 @@ class Ev_Timer
 public: // api
 	virtual ~Ev_Timer();
 
-	virtual ev_timer *register_timer_event(ev_timer *timer, double start, double repeat);
-	virtual void start_timer_event(ev_timer *timer);
-	virtual void stop_timer_event(ev_timer *timer);
-	virtual void deregister_timer_event(ev_timer *timer);
+	virtual Obj_Timer *register_timer_event(Obj_Timer *timer, double start, double repeat);
+	virtual void start_timer_event(Obj_Timer *timer);
+	virtual void stop_timer_event(Obj_Timer *timer);
+	virtual void deregister_timer_event(Obj_Timer *timer);
 
 public: // var
 
@@ -37,7 +38,7 @@ protected: // api
 	 * 输出参数  : 无
 	 * 返 回 值: ev_error		EV_STOP_EVENT:停止定时器			其它：继续定时器
 	*****************************************************************************/
-	virtual ev_error on_ev_timeout(ev_timer *timer) = 0;
+	virtual ev_error on_ev_timeout(Obj_Timer *timer) = 0;
 
 protected: // var
 

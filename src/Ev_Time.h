@@ -53,7 +53,11 @@ public: // api
 	// 精度:ns
 	static struct timespec *current_time(struct timespec *t);
 
-	static struct timespec *get_time(struct timespec *ts, struct timespec *add_ts);
+	static struct timespec *future_time(struct timespec *ts, struct timespec *add_ts);
+
+	static ev_error set_time(struct tm *tm);
+
+	static ev_error set_hardware_time(struct tm *tm);
 
 	static uint32 get_sec_of_day(const tm *t);
 
@@ -62,6 +66,7 @@ public: // api
 	// 打印当前时间
 	static void printf_time();
 	static void printf_time(uint32 sec);
+	static void printf_uptime();
 
 	// 打印当前高精度时间
 	static void printf_precise_time();

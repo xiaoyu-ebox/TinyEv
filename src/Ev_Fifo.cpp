@@ -82,7 +82,7 @@ getm_lock_again:
 
 		m_iswait = true;
 		pthread_mutex_lock(&m_mutex);
-		Ev_Time::get_time(&ts, &m_wt);
+		Ev_Time::future_time(&ts, &m_wt);
 
 		// 解锁
 		pthread_spin_unlock(&m_lock);
@@ -160,7 +160,7 @@ getm_lock_again:
 
 		m_iswait = true;
 		pthread_mutex_lock(&m_mutex);
-		Ev_Time::get_time(&ts, &m_wt);
+		Ev_Time::future_time(&ts, &m_wt);
 
 		// 解锁
 		pthread_spin_unlock(&m_lock);

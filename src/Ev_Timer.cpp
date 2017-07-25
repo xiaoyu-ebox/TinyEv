@@ -24,22 +24,22 @@ Ev_Timer::~Ev_Timer()
 
 }
 
-ev_timer *Ev_Timer::register_timer_event(ev_timer *timer, double start, double repeat)
+Obj_Timer *Ev_Timer::register_timer_event(Obj_Timer *timer, double start, double repeat)
 {
 	return Ev_Vector::instance()->register_timer_event(this, timer, start, repeat);
 }
 
-void Ev_Timer::start_timer_event(ev_timer *timer)
+void Ev_Timer::start_timer_event(Obj_Timer *timer)
 {
 	Ev_Vector::instance()->start_timer_event(timer);
 }
 
-void Ev_Timer::stop_timer_event(ev_timer *timer)
+void Ev_Timer::stop_timer_event(Obj_Timer *timer)
 {
 	Ev_Vector::instance()->stop_timer_event(timer);
 }
 
-void Ev_Timer::deregister_timer_event(ev_timer *timer)
+void Ev_Timer::deregister_timer_event(Obj_Timer *timer)
 {
 	Ev_Vector::instance()->deregister_timer_event(timer);
 }

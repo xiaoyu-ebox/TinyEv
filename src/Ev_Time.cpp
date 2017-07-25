@@ -10,6 +10,9 @@
 /*----------------------------Head file----------------------------*/
 #include "Ev_Time.h"
 
+#include <sys/sysinfo.h>
+#include <linux/rtc.h>
+
 /*----------------------------macro file---------------------------*/
 #define __MODULE__						"[Time]"
 
@@ -62,7 +65,7 @@ struct timespec *Ev_Time::current_time(struct timespec *t)
 	return t;
 }
 
-struct timespec *Ev_Time::get_time(struct timespec *ts, struct timespec *add_ts)
+struct timespec *Ev_Time::future_time(struct timespec *ts, struct timespec *add_ts)
 {
 	current_time(ts);
 
@@ -77,6 +80,39 @@ struct timespec *Ev_Time::get_time(struct timespec *ts, struct timespec *add_ts)
 
 	return ts;
 }
+
+ev_error Ev_Time::set_time(struct tm *tm)
+{
+	struct timeval tv;
+
+	tv.tv_sec = mktime(tm);
+	tv.tv_usec = 0;
+	settimeofday(&tv, NULL);
+
+	return set_hardware_time(tm);
+}
+
+ev_error Ev_Time::set_hardware_time(struct tm *tm)
+{
+	int rtc, ret;
+
+	if((rtc = open("/dev/rtc0", O_WRONLY)) < 0) {
+		if ((rtc = open("/dev/misc/rtc0", O_RDWR)) < 0) {
+			EV_PRINTF_ERR("open rtc err.\n");
+			return EV_DEV_OPEN_ERR;
+		}
+	}
+
+	if((ret = ioctl(rtc, RTC_SET_TIME, tm)) < 0) {
+		close(rtc);
+		EV_PRINTF_ERR("set rtc err:%d.\n", ret);
+		return EV_CTRL_ERR;
+	}
+
+	close(rtc);
+	return EV_SUCCESS;
+}
+
 
 // 获取当天到现在经过的秒数
 uint32 Ev_Time::get_sec_of_day(const tm *t)
@@ -148,6 +184,18 @@ void Ev_Time::printf_time(uint32 sec)
 	}
 
 	EV_PRINTF_DBG("[%u] %02u:%02u:%02u", day, hour, min, sec);
+}
+
+void Ev_Time::printf_uptime()
+{
+	struct sysinfo info;
+
+	if(sysinfo(&info) == 0) {
+		EV_PRINTF_INFO("uptime: %ld sec\n", info.uptime);
+	}
+	else {
+		EV_PRINTF_ERR("uptime:\n");
+	}
 }
 
 void Ev_Time::printf_precise_time()
