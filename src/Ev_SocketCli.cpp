@@ -55,13 +55,8 @@ ev_error Ev_SocketCli::connect_to_host(const char *addr, uint32 args)
 			return EV_CTRL_ERR;
 
 		// 4.建立连接(客户端和服务器端在同一台主机上，connect会马上结束，并返回0)
-#if 0
-		// 全部由on_ev_connect去通知连接成功还是失败
-		if(connect(m_handle, (struct sockaddr *)&m_addr.un, sizeof(m_addr.un)) < 0)
-			return EV_DEV_CONNECT_ERR;
-#else
-		connect(m_handle, (struct sockaddr *)&m_addr.un, sizeof(m_addr.un));
-#endif
+		int err = connect(m_handle, (struct sockaddr *)&m_addr.un, sizeof(m_addr.un));
+		EV_PRINTF_INFO("connect ret = %d, %s", err, strerror(err));
 
 		// 5.加入事件watch
 		return register_handle_event(EV_READ | EV_WRITE, TYPE_UNIX_SOCKET_CLI);
@@ -88,26 +83,8 @@ ev_error Ev_SocketCli::connect_to_host(const char *addr, uint32 args)
 		// 否则无论连接是否建立立即返回-1，并设置errno：
 		//   a.如果errno为EINPROGRESS, 表示此时tcp三次握手仍旧进行。
 		//	 b.如果errno不为EINPROGRESS，则说明连接错误。
-#if 0
-		int error = connect(m_handle, (struct sockaddr *)&m_addr.in, sizeof(m_addr.in));
-		if(error < 0) {
-			if(errno != EINPROGRESS) {
-				// 连接错误
-				EV_PRINTF_ERR("connect err!.");
-				ret = EV_DEV_CONNECT_ERR;
-			}
-			else {
-				// 连接正在进行中
-				ret = EV_DEV_CONNECTING;
-			}
-		}
-		else if(error == 0) {
-			// 连接成功
-			ret = EV_SUCCESS;
-		}
-#else
 		connect(m_handle, (struct sockaddr *)&m_addr.in, sizeof(m_addr.in));
-#endif
+
 		// 5.
 		return register_handle_event(EV_READ | EV_WRITE, TYPE_TCP_SOCKET_CLI);;
 	}

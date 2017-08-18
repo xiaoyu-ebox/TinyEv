@@ -11,7 +11,8 @@
 #include "Mod_Logger.h"
 #include "Ev_Logger_Console.h"
 #include "Ev_Logger_Syslog.h"
-
+#include "Ev_Logger_File.h"
+#include "Ev_Time.h"
 
 /*----------------------------macro file---------------------------*/
 
@@ -30,6 +31,8 @@ Mod_Logger *Mod_Logger::instance()
 }
 
 Mod_Logger::Mod_Logger() :
+	m_type(LOG_PRINTF_TO_CONSOLE),
+	m_level(LOG_LEVEL_DBG),
 	m_obj_logger(NULL)
 {
 
@@ -45,22 +48,18 @@ Mod_Logger::~Mod_Logger()
 	m_instance = NULL;
 }
 
-ev_error Mod_Logger::init(log_record_t type, log_level_t level, const char *filename)
+ev_error Mod_Logger::init(log_record_t type, log_level_t level, const char *args)
 {
-	if(type == LOG_PRINTF_TO_CONSOLE)
+	m_type = type;
+
+	if(m_type == LOG_PRINTF_TO_CONSOLE)
 		m_obj_logger = new Ev_Logger_Console();
-	else if(type == LOG_RECORD_BY_SYSLOG)
+	else if(m_type == LOG_RECORD_BY_SYSLOG)
 		m_obj_logger = new Ev_Logger_Syslog();
+	else if(m_type == LOG_RECORD_TO_FILE)
+		m_obj_logger = new Ev_Logger_File();
 
-#if 0
-	if(m_type == LOG_RECORD_TO_FILE) {
-		m_filename = ev_new(char, LOG_FILENAME_MAX_LENGTH);
-
-		memset(m_filename, 0, LOG_FILENAME_MAX_LENGTH);
-		strncpy(m_filename, filename, LOG_FILENAME_MAX_LENGTH-1);
-		m_filename[LOG_FILENAME_MAX_LENGTH-1] = '\0';
-	}
-#endif
+	return m_obj_logger->init(args);
 }
 
 void Mod_Logger::dbg(const char *format, ...)
@@ -69,8 +68,6 @@ void Mod_Logger::dbg(const char *format, ...)
 		return;
 
 	va_list ap;
-	int cnt;
-
 	va_start(ap, format);
 	m_obj_logger->dbg(format, ap);
 	va_end(ap);
@@ -82,10 +79,11 @@ void Mod_Logger::info(const char *format, ...)
 		return;
 
 	va_list ap;
-	int cnt;
-
 	va_start(ap, format);
-	m_obj_logger->info(format, ap);
+	if(m_type == LOG_RECORD_BY_SYSLOG)
+		m_obj_logger->info(format, ap);
+	else
+		m_obj_logger->dbg(format, ap);
 	va_end(ap);
 }
 
@@ -95,25 +93,53 @@ void Mod_Logger::warning(const char *format, ...)
 		return;
 
 	va_list ap;
-	int cnt;
-
 	va_start(ap, format);
-	m_obj_logger->warning(format, ap);
+	if(m_type == LOG_RECORD_BY_SYSLOG)
+		m_obj_logger->warning(format, ap);
+	else
+		m_obj_logger->dbg(format, ap);
 	va_end(ap);
 }
 
 void Mod_Logger::error(const char *format, ...)
 {
 	va_list ap;
-	int cnt;
-
 	va_start(ap, format);
-	m_obj_logger->error(format, ap);
+	if(m_type == LOG_RECORD_BY_SYSLOG)
+		m_obj_logger->error(format, ap);
+	else
+		m_obj_logger->dbg(format, ap);
 	va_end(ap);
 }
 
-void Mod_Logger::hexdump(const uint8 *buf, uint32 size)
+void Mod_Logger::hexdump(const char *identify, const uint8 *buf, uint32 size)
 {
-	m_obj_logger->hexdump(buf, size);
+	char temp_buf[256 * 3 + 1];
+	char *p_temp_buf;
+	uint8 temp_size;
+
+	if(m_type == LOG_RECORD_BY_SYSLOG) {
+		m_obj_logger->print(identify);
+	}
+	else {
+		struct tm t;
+		Ev_Time::current_time(&t);
+		m_obj_logger->print("[%02u-%02u %u:%u:%u]%s", t.tm_mon + 1, t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec, identify);
+	}
+
+	while(size) {
+		p_temp_buf = temp_buf;
+		temp_size = size > 256 ? 256 : size;
+		size -= temp_size;
+
+		while(temp_size--) {
+			sprintf(p_temp_buf, "%02x ", *buf++);
+			p_temp_buf += 3;
+		}
+		*p_temp_buf = '\0';
+		m_obj_logger->print(temp_buf);
+	}
+
+	m_obj_logger->print("\n");
 }
 

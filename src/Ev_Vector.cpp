@@ -19,6 +19,8 @@ typedef void (*timer_ev_cb)(struct ev_loop *loop, ev_timer *w, int revents);
 void ev_vector_handle_cb(struct ev_loop *loop, void *io, int revents);
 void ev_vector_connect_cb(struct ev_loop *loop, void *io, int revents);
 void ev_vector_listen_cb(struct ev_loop *loop, void *io, int revents);
+void ev_vector_signal_cb(struct ev_loop *loop, ev_signal *watcher, int revents);
+
 
 /*----------------------------macro file---------------------------*/
 #define __MODULE__						"[Vector]"
@@ -63,13 +65,18 @@ void Ev_Vector::run_loop()
 	ev_run(def_loop, 0);
 }
 
+void Ev_Vector::break_loop()
+{
+	ev_unloop(def_loop, EVBREAK_ALL);
+}
+
 struct ev_loop *Ev_Vector::default_loop()
 {
 	return def_loop;
 }
 
 ev_error Ev_Vector::register_handle_event(Ev_Handle *handle, ev_type_t events, handle_type_t type)
-{	
+{
 	ARGS_NULL_CHECK(handle);
 	CONDITION_CHECK(handle->m_handle == INVALID_HANDLE);
 
@@ -157,6 +164,17 @@ void Ev_Vector::deregister_timer_event(ev_timer *watcher)
 
 	ev_free(watcher);
 	watcher = NULL;
+}
+
+ev_error Ev_Vector::register_signal_event(int signal, ev_signal_cb_t cb)
+{
+	ev_signal *watcher = ev_new(ev_signal, 1);
+
+	watcher->data = (void *)cb;
+	ev_signal_init(watcher, ev_vector_signal_cb, signal);
+	ev_signal_start(def_loop, watcher);
+
+	return EV_SUCCESS;
 }
 
 ev_error Ev_Vector::set_non_blocking(int fd)
@@ -258,4 +276,11 @@ void ev_vector_connect_cb(struct ev_loop *loop, void *io, int events)
 		Ev_Vector::register_handle_event(socket_client, EV_READ, TYPE_HANDLE);
 }
 
+void ev_vector_signal_cb(struct ev_loop *loop, ev_signal *watcher, int revents)
+{
+	ev_signal_cb_t cb = (ev_signal_cb_t)watcher->data;
+	
+	if(cb)
+		cb(loop, watcher->signum);
+}
 

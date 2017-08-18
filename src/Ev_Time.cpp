@@ -191,10 +191,10 @@ void Ev_Time::printf_uptime()
 	struct sysinfo info;
 
 	if(sysinfo(&info) == 0) {
-		EV_PRINTF_INFO("uptime: %ld sec\n", info.uptime);
+		EV_PRINTF_INFO("uptime: %ld sec", info.uptime);
 	}
 	else {
-		EV_PRINTF_ERR("uptime:\n");
+		EV_PRINTF_ERR("uptime:");
 	}
 }
 

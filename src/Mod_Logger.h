@@ -26,13 +26,25 @@ public: // api
 	Mod_Logger();
 	~Mod_Logger();
 	static Mod_Logger *instance();
-	ev_error init(log_record_t type = LOG_PRINTF_TO_CONSOLE, log_level_t level = LOG_LEVEL_INFO, const char *filename = NULL);
+
+	/*****************************************************************************
+	 * 函数功能  : logger初始化函数
+	 * 输入参数  : type = LOG_PRINTF_TO_CONSOLE  log写入方式
+	             level = LOG_LEVEL_INFO        log写入级别
+	             *args = NULL             	   附属参数
+	               		当type = LOG_PRINTF_TO_CONSOLE时：args无用
+	               		当type = LOG_RECORD_BY_SYSLOG时：args为logger的标识
+	               		当type = LOG_RECORD_TO_FILE：args为文件路径
+	 * 输出参数  : 无
+	 * 返 回 值  : ev_error
+	*****************************************************************************/
+	ev_error init(log_record_t type = LOG_PRINTF_TO_CONSOLE, log_level_t level = LOG_LEVEL_INFO, const char *args = NULL);
 
 	void dbg(const char *format, ...);
 	void info(const char *format, ...);
 	void warning(const char *format, ...);
 	void error(const char *format, ...);
-	void hexdump(const uint8 *buf, uint32 size);
+	void hexdump(const char *identify, const uint8 *buf, uint32 size);
 
 	void set_level(log_level_t level) {m_level = level;}
 

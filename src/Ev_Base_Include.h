@@ -15,8 +15,10 @@
 #include "Ev_Error.h"
 #include "Ev_Debug.h"
 #include "Ev_Malloc.h"
+#include "Mod_Logger.h"
 
 #include <assert.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>

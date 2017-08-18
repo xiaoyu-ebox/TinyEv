@@ -38,7 +38,7 @@ protected: // var
 private: // api
 
 private: // var
-
+	uint8 *m_recv_buf;
 };
 
 

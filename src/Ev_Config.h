@@ -21,6 +21,13 @@
 
 #define MAX_EV_MSG_FIFO_SIZE			128
 
+// IPC通讯消息最大size
+#define IPC_BODY_DEF_SIZE				(4096)
+#define IPC_BUFFER_DEF_SIZE				(sizeof(ipc_msg_info_t)+IPC_BODY_DEF_SIZE)
+
+// stream buffer min size >= (IPC_BUFFER_DEF_SIZE*2)
+#define STREAM_BUFFER_DEF_SIZE			(IPC_BODY_DEF_SIZE<<1)
+
 /*----------------------------type define--------------------------*/
 
 /*-----------------------------------------------------------------*/

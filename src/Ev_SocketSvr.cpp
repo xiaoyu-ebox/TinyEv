@@ -10,6 +10,8 @@
 /*----------------------------Head file----------------------------*/
 #include "Ev_SocketSvr.h"
 
+#include <stddef.h>
+
 /*----------------------------macro file---------------------------*/
 #define __MODULE__						"[SocketSvr]"
 
@@ -48,14 +50,15 @@ ev_error Ev_SocketSvr::create_host_service(const char *addr, uint32 args)
 		unlink(addr);
 
 		// 绑定
-		if(bind(m_handle, (struct sockaddr *)&m_addr.un, sizeof(m_addr.un)) < 0)
+		int size = offsetof(struct sockaddr_un, sun_path) + strlen(m_addr.un.sun_path);
+		if(bind(m_handle, (struct sockaddr *)&m_addr.un, size) < 0)
 			return EV_DEV_BIND_ERR;
 
 		return listen_client_connect();
 	}
-	else if(m_type == SOCKET_TCP_SERVER) {
+	//else if(m_type == SOCKET_TCP_SERVER) {
 		// ...
-	}
+	//}
 	
 	EV_PRINTF_ERR("Unsupport socket type.");
 	return EV_DEV_TYPE_UNSUPPORT;

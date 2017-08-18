@@ -16,14 +16,24 @@
 #define __MODULE__				"[Main]"
 
 /*----------------------------type define--------------------------*/
+static void sigint_cb(struct ev_loop *loop, int signal);
+static void exit_cb();
 
 /*----------------------------var define---------------------------*/
 
 /*-----------------------------------------------------------------*/
 int main(int argc, char **argv)
 {
+	// 初始化log
+	Mod_Logger::instance()->init(LOG_PRINTF_TO_CONSOLE, LOG_LEVEL_DBG);
+
 	// 初始化事件驱动容器
 	Ev_Vector::instance()->init();
+
+	// 注册信号事件
+	Ev_Vector::register_signal_event(SIGINT, sigint_cb);
+	Ev_Vector::register_signal_event(SIGTERM, sigint_cb);
+	Ev_Vector::register_signal_event(SIGQUIT, sigint_cb);
 
 	// 初始化ipc server
 	Ev_IPCSvr::instance()->init();
@@ -40,8 +50,26 @@ int main(int argc, char **argv)
 	// 启动io事件处理
 	Ev_Vector::instance()->run_loop();
 
-	EV_PRINTF_INFO("End APP.");
+	exit_cb();
+
+	printf("End APP.\n");
 
 	return EV_SUCCESS;
 }
+
+static void sigint_cb(struct ev_loop *loop, int signal)
+{
+	EV_PRINTF_WARN("Recv signal:%d.", signal);
+
+	Ev_Vector::instance()->break_loop();
+}
+
+void exit_cb()
+{
+	EV_PRINTF_INFO("Exit APP.");
+
+	delete Mod_Logger::instance();
+}
+
+
 

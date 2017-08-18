@@ -32,6 +32,8 @@ enum {
 };
 typedef uint32				ev_type_t;
 
+typedef void (*ev_signal_cb_t)(struct ev_loop *loop, int signal);
+
 /*-----------------------------------------------------------------*/
 class Ev_Handle;
 class Ev_Vector
@@ -46,6 +48,7 @@ public: // api
 
 
 	static void run_loop();
+	static void break_loop();
 	static struct ev_loop *default_loop();
 
 
@@ -59,6 +62,10 @@ public: // api
 	static void start_timer_event(ev_timer *watcher);
 	static void stop_timer_event(ev_timer *watcher);
 	static void deregister_timer_event(ev_timer *watcher);
+
+
+	// 注册/注销signal事件
+	static ev_error register_signal_event(int signal, ev_signal_cb_t cb);
 
 
 	// 设置非阻塞

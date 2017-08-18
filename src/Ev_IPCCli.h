@@ -16,6 +16,7 @@
 #include "Ev_Timer.h"
 
 /*----------------------------macro file---------------------------*/
+#define DEF_IPC_NODE			"/tmp/ev_ipc.socket"
 
 /*----------------------------type define--------------------------*/
 typedef enum {
@@ -74,6 +75,7 @@ private: // api
 
 private: // var
 	ev_timer *m_connect_timer;
+	uint8 *m_recv_buf;
 };
 
 

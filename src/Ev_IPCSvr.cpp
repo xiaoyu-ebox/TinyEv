@@ -46,10 +46,10 @@ Ev_IPCSvr::~Ev_IPCSvr()
 }
 
 ev_error Ev_IPCSvr::init()
-{	
+{
 	m_restart_timer = register_timer_event(m_restart_timer, 2., 2.);
 	
-	return create_host_service("./.ipc.socket");
+	return create_host_service(DEF_IPC_NODE);
 }
 
 ev_error Ev_IPCSvr::on_ev_accept_malloc_cli(Ev_SocketCli **socket)

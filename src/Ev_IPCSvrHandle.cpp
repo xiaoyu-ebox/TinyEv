@@ -20,25 +20,30 @@
 
 /*-----------------------------------------------------------------*/
 Ev_IPCSvrHandle::Ev_IPCSvrHandle() :
-	Ev_SocketCli(SOCKET_SYS_BUS_CLIENT)
+	Ev_SocketCli(SOCKET_SYS_BUS_CLIENT),
+	m_recv_buf(NULL)
 {
-
+	m_recv_buf = ev_new(uint8, IPC_BUFFER_DEF_SIZE);
 }
 
 Ev_IPCSvrHandle::~Ev_IPCSvrHandle()
 {
-
+	if(m_recv_buf) {
+		ev_free(m_recv_buf);
+		m_recv_buf = NULL;
+	}
 }
 
 ev_error Ev_IPCSvrHandle::on_ev_stream_read(uint32 size)
 {
 	uint32 msg_size;
-	uint8 buffer[1024];	// TODO:缓冲大小根据消息的最大size
-	ipc_msg_info_t *msg_info = (ipc_msg_info_t *)buffer;
+	ipc_msg_info_t *msg_info = (ipc_msg_info_t *)m_recv_buf;
+
+	EV_PRINTF_DBG("on_ev_stream_read size:%u", size);
 
 	while(1) {
 		// 试读msg头部信息
-		if(stream_try_read(buffer, sizeof(ipc_msg_info_t)) == NULL)
+		if(stream_try_read(m_recv_buf, sizeof(ipc_msg_info_t)) == NULL)
 			return EV_SUCCESS;
 
 		// 长度判断
@@ -47,7 +52,7 @@ ev_error Ev_IPCSvrHandle::on_ev_stream_read(uint32 size)
 			return EV_SUCCESS;
 
 		// 读取msg
-		stream_read(buffer, msg_size);
+		stream_read(m_recv_buf, msg_size);
 		size -= msg_size;
 
 		//EV_PRINTF_DBG_HEX(buffer, size);

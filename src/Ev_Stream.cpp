@@ -19,14 +19,18 @@
 
 /*-----------------------------------------------------------------*/
 Ev_Stream::Ev_Stream(uint32 fifo_size, fifo_type_t type) :
-	Ev_Fifo(fifo_size, 0, type)
+	Ev_Fifo(fifo_size, 0, type),
+	m_recv_buf(NULL)
 {
-
+	m_recv_buf = ev_new(uint8, STREAM_BUFFER_DEF_SIZE);
 }
 
 Ev_Stream::~Ev_Stream()
 {
-
+	if(m_recv_buf) {
+		ev_free(m_recv_buf);
+		m_recv_buf = NULL;
+	}
 }
 
 ev_error Ev_Stream::on_ev_read()
@@ -34,15 +38,12 @@ ev_error Ev_Stream::on_ev_read()
 	int ret;
 	bool has_data = false;
 	ssize_t size;
-	uint8 buffer[4096];
-
-	//EV_PRINTF_DBG_FUNC();
 
 	while(1) {
-		size = read(m_handle, buffer, sizeof(buffer));
+		size = read(m_handle, m_recv_buf, STREAM_BUFFER_DEF_SIZE);
 		if(size > 0) {
 			// 表示接受数据完毕，返回值即是接受到的字节数
-			fifo_push(buffer, size);
+			fifo_push(m_recv_buf, size);
 			has_data = true;
 		}
 		else if(size == 0) {
@@ -91,13 +92,6 @@ uint32 Ev_Stream::stream_read(uint8 *buffer, uint32 size)
 {
 	return fifo_pop(buffer, size);
 }
-
-#if 0
-uint32 Ev_Stream::stream_try_read(uint8 *buffer, uint32 size)
-{
-	return fifo_try_read(buffer, size);
-}
-#endif
 
 /*****************************************************************************
  * 函数功能  : 试读取缓冲(fifo size不减小)

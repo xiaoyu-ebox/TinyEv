@@ -60,7 +60,7 @@ private: // api
 	ev_error on_ev_read();
 
 private: // var
-
+	uint8 *m_recv_buf;
 };
 
 

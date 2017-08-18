@@ -16,7 +16,11 @@ libTinyEv_la_SOURCES = src/Ev_Event.cpp src/Ev_Fifo.cpp src/Ev_Handle.cpp src/Ev
 					src/Ev_Mod_Manager.cpp src/Ev_Module.cpp \
 					src/Ev_Time.cpp src/Ev_Timer.cpp \
 					src/Ev_Http.cpp \
-					src/Ev_Uart.cpp
+					src/Ev_Uart.cpp \
+					src/Ev_Logger_Console.cpp \
+					src/Ev_Logger_Syslog.cpp \
+					src/Ev_Logger_File.cpp \
+					src/Mod_Logger.cpp
 
 TinyEv_daemon_LDFLAGS = ${LDFLAGS} -lTinyEv -lev -lpthread
 TinyEv_daemon_CPPFLAGS = ${CXXFLAGS} -I ./src
