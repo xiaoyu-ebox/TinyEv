@@ -1,6 +1,6 @@
 /*******************************************************************
  *
- * Copyright (C), 2002-2017, www.lifesense.com, All rights reserved.
+ * Copyright (C), 20xx-2017, www.xxxxxx.com, All rights reserved.
  *
  * Author      : xiaoyu | xiaoyu_ebox@163.com
  * Create Time : 2017-3-12

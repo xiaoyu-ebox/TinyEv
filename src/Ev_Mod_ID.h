@@ -14,10 +14,6 @@
 #include "Ev_Base_Include.h"
 
 /*----------------------------macro file---------------------------*/
-// 内部事件flag
-#define INTERNAL_EVENT				0x8000		// event_id_t为16位整形
-
-
 // mod id分类
 #define MOD_ID_SYSTEM_BASE			0x0001		// 输入事件
 #define MOD_ID_CUSTOMER_BASE 		0x0100

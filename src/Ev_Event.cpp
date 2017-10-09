@@ -69,8 +69,7 @@ ev_error Ev_Event::ev_msg_handle()
 		if(ipc_msg_info->type == MSG_TYPE_IPC_DISPENSE) {
 			ev_msg_info_t *msg_info = (ev_msg_info_t *)ipc_msg_info->data;
 
-			if(!(msg_info->ev_id & INTERNAL_EVENT))
-				Ev_IPCCli::instance()->ipc_write_data((uint8 *)ipc_msg_info, sizeof(ipc_msg_info_t)+ipc_msg_info->length);
+			Ev_IPCCli::instance()->ipc_write_data((uint8 *)ipc_msg_info, sizeof(ipc_msg_info_t)+ipc_msg_info->length);
 		}
 
 		// 内部进程分发
