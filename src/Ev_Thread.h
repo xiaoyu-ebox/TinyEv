@@ -26,8 +26,10 @@ class Ev_Thread
 {
 public: // api
 	void quit() {m_exit = true;}
+	void force_quit();
 
 	bool is_running() {return !m_exit;}
+	uint32 get_pid() {return m_pid;}
 	uint32 get_exit_code() {return m_exit_code;}
 
 public: // var

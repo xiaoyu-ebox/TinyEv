@@ -29,7 +29,14 @@ Ev_Thread::Ev_Thread() :
 Ev_Thread::~Ev_Thread()
 {
 	m_exit = true;
+
+	pthread_cancel(m_pid);
 	pthread_join(m_pid, NULL);
+}
+
+void Ev_Thread::force_quit()
+{
+	pthread_cancel(m_pid);
 }
 
 void *thread_routine(void *args)
