@@ -15,6 +15,10 @@
 /*----------------------------macro file---------------------------*/
 #define __MODULE__						"[IPCCli]"
 
+
+#define TIMER_RECOONECT_SEC		(2.)
+
+
 /*----------------------------type define--------------------------*/
 
 /*----------------------------var define---------------------------*/
@@ -59,9 +63,9 @@ ev_error Ev_IPCCli::init()
 	if(m_recv_buf == NULL)
 		return EV_NOMEM;
 
-	ret = connect_to_host(DEF_IPC_NODE);
+	m_connect_timer = register_timer_event(m_connect_timer, TIMER_RECOONECT_SEC, 0);
 
-	m_connect_timer = register_timer_event(m_connect_timer, 2., 0);
+	ret = connect_to_host(DEF_IPC_NODE);
 
 	EV_PRINTF_INFO("init ok %d, ret %d", m_handle, ret);
 	return EV_SUCCESS;
@@ -94,7 +98,9 @@ void Ev_IPCCli::on_ev_connect(ev_error ret)
 	else {
 		deregister_handle_event();
 
-		// 添加定时重连机制
+		/* 添加重连机制(因为重复定时的时间为0，如果单纯使用
+		   start_timer_event这句再次启动定时器将会死循环) */
+		register_timer_event(m_connect_timer, TIMER_RECOONECT_SEC, 0);
 		start_timer_event(m_connect_timer);
 	}
 }
@@ -160,7 +166,7 @@ ev_error Ev_IPCCli::on_ev_error()
 
 ev_error Ev_IPCCli::on_ev_timeout(ev_timer *timer)
 {
-	init();
+	connect_to_host(DEF_IPC_NODE);
 
 	return EV_SUCCESS;
 }

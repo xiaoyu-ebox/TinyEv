@@ -14,6 +14,9 @@
 /*----------------------------macro file---------------------------*/
 #define __MODULE__						"[IPCSvr]"
 
+
+#define TIMER_RESTART_SEC		(2.)
+
 /*----------------------------type define--------------------------*/
 
 /*----------------------------var define---------------------------*/
@@ -47,7 +50,7 @@ Ev_IPCSvr::~Ev_IPCSvr()
 
 ev_error Ev_IPCSvr::init()
 {
-	m_restart_timer = register_timer_event(m_restart_timer, 2., 2.);
+	m_restart_timer = register_timer_event(m_restart_timer, TIMER_RESTART_SEC, TIMER_RESTART_SEC);
 	
 	return create_host_service(DEF_IPC_NODE);
 }

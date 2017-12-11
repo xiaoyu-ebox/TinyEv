@@ -21,6 +21,7 @@ typedef enum {
 	BR19200,
 	BR38400,
 	BR115200,
+	BR1000000,
 	BR_MAX		// INVALID
 } uart_br_t;
 

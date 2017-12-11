@@ -13,6 +13,7 @@
 /*----------------------------Head file----------------------------*/
 #include "Ev_Fifo.h"
 #include "Ev_IPCCli.h"
+#include "Ev_Thread_Manager.h"
 
 /*----------------------------macro file---------------------------*/
 
@@ -31,7 +32,7 @@ public: // api
 
 	// 系统消息处理
 	ev_error run_ev_msg_manager();
-	ev_error ev_msg_handle();
+	ev_error ev_msg_handle(volatile bool *exit_flag);
 	ev_error ev_put_event(msg_type_t type, event_id_t id, priority_t priority, uint8 *data, uint32 size);
 	ev_error ev_put_event(ipc_msg_info_t *ipc_msg);
 
@@ -50,6 +51,7 @@ private: // api
 
 private: // var
 	Ev_Fifo *ev_msg_fifo;
+	Ev_Thread *m_msg_thread;
 };
 
 

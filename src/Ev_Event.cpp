@@ -12,7 +12,7 @@
 #include "Ev_Mod_Manager.h"
 
 /*----------------------------static func--------------------------*/
-void *consumer_proc(void *arg);
+static void *spawn(void *args, volatile bool *exit_flag);
 
 /*----------------------------macro file---------------------------*/
 
@@ -48,20 +48,16 @@ ev_error Ev_Event::init()
 
 ev_error Ev_Event::run_ev_msg_manager()
 {
-	pthread_t consumer_tid;
-
-	if(pthread_create(&consumer_tid, NULL, consumer_proc, (void *)this) != 0)
-		return EV_OBJ_CREATE_ERR;
+	m_msg_thread = Ev_Thread_Manager::instance()->spawn(spawn, this);
 
 	return EV_SUCCESS;
 }
 
-
-ev_error Ev_Event::ev_msg_handle()
+ev_error Ev_Event::ev_msg_handle(volatile bool *exit_flag)
 {
 	ipc_msg_info_t *ipc_msg_info;
 
-	while(1) {
+	while(!(*exit_flag)) {
 		if(ev_event_msg_pop(&ipc_msg_info) != EV_SUCCESS)
 			continue;
 
@@ -123,11 +119,11 @@ ev_error Ev_Event::ev_event_msg_pop(ipc_msg_info_t **ipc_msg_info)
 	return ev_msg_fifo->fifo_pop((uint8 *)ipc_msg_info, sizeof(ipc_msg_info_t **)) ? EV_SUCCESS : EV_CONTAINER_FULL;
 }
 
-void *consumer_proc(void *arg)
+void *spawn(void *args, volatile bool *exit_flag)
 {
-	Ev_Event *obj = (Ev_Event *)arg;
+	Ev_Event *obj = (Ev_Event *)args;
 
-	obj->ev_msg_handle();
+	obj->ev_msg_handle(exit_flag);
 
 	return NULL;
 }

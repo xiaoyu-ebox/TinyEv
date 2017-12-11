@@ -1,30 +1,5 @@
-AUTOMAKE_OPTIONS=foreign subdir-objects
+AUTOMAKE_OPTIONS=foreign
 
-includedir = @includedir@/TinyEv
-include_HEADERS = src/*.h
+SUBDIRS = src daemon example
 
-TinyEv_VERSION_INFO = 1:0:0
-lib_LTLIBRARIES = libTinyEv.la
-bin_PROGRAMS = TinyEv_daemon
-
-EXTRA_DIST = src/*.h
-libTinyEv_la_CPPFLAGS = ${CXXFLAGS} -I ./src
-libTinyEv_la_LDFLAGS = ${LDFLAGS} -shared -fPIC -version-info $(TinyEv_VERSION_INFO)
-libTinyEv_la_SOURCES = src/Ev_Event.cpp src/Ev_Fifo.cpp src/Ev_Handle.cpp src/Ev_Vector.cpp \
-					src/Ev_SocketCli.cpp src/Ev_SocketSvr.cpp src/Ev_Stream.cpp \
-					src/Ev_IPCCli.cpp src/Ev_IPCSvr.cpp src/Ev_IPCSvrHandle.cpp \
-					src/Ev_Mod_Manager.cpp src/Ev_Module.cpp \
-					src/Ev_Time.cpp src/Ev_Timer.cpp \
-					src/Ev_Http.cpp \
-					src/Ev_Uart.cpp \
-					src/Ev_Logger_Console.cpp \
-					src/Ev_Logger_Syslog.cpp \
-					src/Ev_Logger_File.cpp \
-					src/Mod_Logger.cpp \
-					src/Ev_Thread.cpp \
-					src/Ev_Thread_Manager.cpp
-
-TinyEv_daemon_LDFLAGS = ${LDFLAGS} -lTinyEv -lev -lpthread
-TinyEv_daemon_CPPFLAGS = ${CXXFLAGS} -I ./src
-TinyEv_daemon_SOURCES = daemon/TinyEv_daemon.cpp
-
+EXTRA_DIST= README.md

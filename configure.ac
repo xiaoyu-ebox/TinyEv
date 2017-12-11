@@ -27,5 +27,5 @@ AC_TYPE_UINT8_T
 # Checks for library functions.
 AC_CHECK_FUNCS([clock_gettime gettimeofday localtime_r memset socket])
 
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile daemon/Makefile example/Makefile])
 AC_OUTPUT
