@@ -56,6 +56,11 @@ void Ev_Logger_Syslog::error(const char *format, va_list ap)
 	vsyslog(LOG_ERR, format, ap);
 }
 
+void Ev_Logger_Syslog::vprint(const char *format, va_list ap)
+{
+	vsyslog(LOG_DEBUG, format, ap);
+}
+
 void Ev_Logger_Syslog::print(const char *format, ...)
 {
 	va_list ap;

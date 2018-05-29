@@ -25,9 +25,10 @@ public: // api
 	~Ev_Logger_File();
 
 
-	ev_error init(const void *args = NULL);
+	ev_error init(const void *program_name = NULL);
 
 	void dbg(const char *format, va_list ap);
+	void vprint(const char *format, va_list ap);
 	void print(const char *format, ...);
 
 public: // var
@@ -37,9 +38,12 @@ protected: // api
 protected: // var
 
 private: // api
+	ev_error log_dir_init(const char *program_name);
+	ev_error get_max_index(const char *dir_path, uint32 &max_index);
 
 private: // var
 	FILE *m_logfile;
+	char *m_file_name;
 	char *m_w_buffer;
 };
 

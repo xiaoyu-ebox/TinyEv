@@ -11,51 +11,76 @@
 #define __EV_DEBUG_H__
 
 /*----------------------------Head file----------------------------*/
-#include "Ev_Config.h"
+#include "Mod_Logger.h"
 
 /*----------------------------macro file---------------------------*/
-#define __DBG								""
-#define __INFO								""
-#define __WARN								"W"
-#define __ERR								"E"
-
-#define MOD_COLOR_S							"\033[34m"
-#define MOD_COLOR_E							"\033[0m"
-
 #if (CONFIG_DEBUG & DEBUG_DBG)
-#define EV_PRINTF_DBG_FUNC()				Mod_Logger::instance()->dbg(__DBG MOD_COLOR_S __MODULE__ MOD_COLOR_E "%s\n", __FUNCTION__)
+#define EV_PRINTF_RAW(format, ...)			Mod_Logger::instance()->printf(format, ##__VA_ARGS__)
+#define EV_PRINTF_DBG_NONLF(format, ...)	Mod_Logger::instance()->dbg(__DBG MOD_COLOR_S __MODULE__ MOD_COLOR_E format, ##__VA_ARGS__)
+#define EV_PRINTF_DBG_FUNC()				Mod_Logger::instance()->dbg(__DBG MOD_COLOR_S __MODULE__ MOD_COLOR_E "[%d]%s\n", __LINE__, __FUNCTION__)
 #define EV_PRINTF_DBG(format, ...)      	Mod_Logger::instance()->dbg(__DBG MOD_COLOR_S __MODULE__ MOD_COLOR_E format "\n", ##__VA_ARGS__)
 #define EV_PRINTF_DBG_LINE()     			Mod_Logger::instance()->dbg(__DBG MOD_COLOR_S __MODULE__ MOD_COLOR_E "line:%d\n", __LINE__)
 #define EV_PRINTF_DBG_TAB(format, ...)      Mod_Logger::instance()->dbg(__DBG MOD_COLOR_S __MODULE__ MOD_COLOR_E "\t" format "\n", ##__VA_ARGS__)
 #define EV_PRINTF_DBG_TAB2(format, ...)     Mod_Logger::instance()->dbg(__DBG MOD_COLOR_S __MODULE__ MOD_COLOR_E "\t" "\t" format "\n", ##__VA_ARGS__)
 #else
+#define EV_PRINTF_RAW(format, ...)
+#define EV_PRINTF_DBG_NONLF(format, ...)
+#define EV_PRINTF_DBG_FUNC()
 #define EV_PRINTF_DBG(format, ...)
+#define EV_PRINTF_DBG_LINE()
+#define EV_PRINTF_DBG_TAB(format, ...)
+#define EV_PRINTF_DBG_TAB2(format, ...)
 #endif
 
 #if (CONFIG_DEBUG & DEBUG_INFO)
-#define EV_PRINTF_INFO(format, ...)     	Mod_Logger::instance()->info(__INFO MOD_COLOR_S __MODULE__ MOD_COLOR_E format "\n", ##__VA_ARGS__)
-#define EV_PRINTF_INFO_TAB(format, ...)     Mod_Logger::instance()->info(__INFO MOD_COLOR_S __MODULE__ MOD_COLOR_E "\t" format "\n", ##__VA_ARGS__)
-#define EV_PRINTF_INFO_TAB2(format, ...)    Mod_Logger::instance()->info(__INFO MOD_COLOR_S __MODULE__ MOD_COLOR_E "\t" "\t" format "\n", ##__VA_ARGS__)
+#define EV_PRINTF_INFO_INIT_SUCCESS()		Mod_Logger::instance()->info(__INFO MOD_COLOR_S __MODULE__ MOD_COLOR_E " init success.\n")
+#define EV_PRINTF_INFO_NONLF(format, ...)	Mod_Logger::instance()->info(__INFO MOD_COLOR_S __MODULE__ MOD_COLOR_E format, ##__VA_ARGS__)
+#define EV_PRINTF_INFO(format, ...)			Mod_Logger::instance()->info(__INFO MOD_COLOR_S __MODULE__ MOD_COLOR_E format "\n", ##__VA_ARGS__)
+#define EV_PRINTF_INFO_TAB(format, ...)		Mod_Logger::instance()->info(__INFO MOD_COLOR_S __MODULE__ MOD_COLOR_E "\t" format "\n", ##__VA_ARGS__)
+#define EV_PRINTF_INFO_TAB2(format, ...)	Mod_Logger::instance()->info(__INFO MOD_COLOR_S __MODULE__ MOD_COLOR_E "\t" "\t" format "\n", ##__VA_ARGS__)
 #else
+#define EV_PRINTF_INFO_NONLF(format, ...)
 #define EV_PRINTF_INFO(format, ...)
+#define EV_PRINTF_INFO_TAB(format, ...)
+#define EV_PRINTF_INFO_TAB2(format, ...)
 #endif
 
 #if (CONFIG_DEBUG & DEBUG_WARN)
-#define EV_PRINTF_WARN(format, ...)			Mod_Logger::instance()->warning("\033[47;33m" __WARN MOD_COLOR_S __MODULE__ MOD_COLOR_E format "\033[0m\n", ##__VA_ARGS__)
+#define EV_PRINTF_WARN_NONLF(format, ...)	Mod_Logger::instance()->warning(__WARN MOD_COLOR_S __MODULE__ MOD_COLOR_E CTRL_F_YELLOW format CTRL_CLOSE_ALL, ##__VA_ARGS__)
+#define EV_PRINTF_WARN(format, ...)			Mod_Logger::instance()->warning(__WARN MOD_COLOR_S __MODULE__ MOD_COLOR_E CTRL_F_YELLOW format CTRL_CLOSE_ALL "\n", ##__VA_ARGS__)
 #else
+#define EV_PRINTF_WARN_NONLF(format, ...)
 #define EV_PRINTF_WARN(format, ...)
 #endif
 
 #if (CONFIG_DEBUG & DEBUG_ERR)
-#define EV_PRINTF_ERR(format, ...)			Mod_Logger::instance()->error("\033[47;31m" __ERR MOD_COLOR_S __MODULE__ MOD_COLOR_E format "\033[0m\n", ##__VA_ARGS__)
+#define EV_PRINTF_ERR_NONLF(format, ...)	Mod_Logger::instance()->error(__ERR  MOD_COLOR_S __MODULE__ MOD_COLOR_E CTRL_F_RED format CTRL_CLOSE_ALL, ##__VA_ARGS__)
+#define EV_PRINTF_ERR(format, ...)			Mod_Logger::instance()->error(__ERR  MOD_COLOR_S __MODULE__ MOD_COLOR_E CTRL_F_RED format CTRL_CLOSE_ALL "\n", ##__VA_ARGS__)
 #else
+#define EV_PRINTF_ERR_NONLF(format, ...)
 #define EV_PRINTF_ERR(format, ...)
 #endif
 
 #if (CONFIG_DEBUG & DEBUG_HEX)
+#define EV_PRINTF_DBG_HEX_NONLF(identify, array, size)	Mod_Logger::instance()->hexdump(MOD_COLOR_S __MODULE__ MOD_COLOR_E identify, array, size, true, false)
 #define EV_PRINTF_DBG_HEX(identify, array, size)		Mod_Logger::instance()->hexdump(MOD_COLOR_S __MODULE__ MOD_COLOR_E identify, array, size)
+#define EV_PRINTF_RAW_HEX_NONLF(identify, array, size)	Mod_Logger::instance()->hexdump(identify, array, size, false, false)
+#define EV_PRINTF_RAW_HEX(identify, array, size)		Mod_Logger::instance()->hexdump(identify, array, size, false)
+
+#define EV_PRINTF_DBG_HEX_REVERSE_NONLF(identify, array, size)	Mod_Logger::instance()->hexdump_reverse(MOD_COLOR_S __MODULE__ MOD_COLOR_E identify, array, size, true, false)
+#define EV_PRINTF_DBG_HEX_REVERSE(identify, array, size)		Mod_Logger::instance()->hexdump_reverse(MOD_COLOR_S __MODULE__ MOD_COLOR_E identify, array, size)
+#define EV_PRINTF_RAW_HEX_REVERSE_NONLF(identify, array, size)	Mod_Logger::instance()->hexdump_reverse(identify, array, size, false, false)
+#define EV_PRINTF_RAW_HEX_REVERSE(identify, array, size)		Mod_Logger::instance()->hexdump_reverse(identify, array, size, false)
 #else
+#define EV_PRINTF_DBG_HEX_NONLF(identify, array, size)
 #define EV_PRINTF_DBG_HEX(identify, array, size)
+#define EV_PRINTF_RAW_HEX_NONLF(identify, array, size)
+#define EV_PRINTF_RAW_HEX(identify, array, size)
+
+#define EV_PRINTF_DBG_HEX_REVERSE_NONLF(identify, array, size)
+#define EV_PRINTF_DBG_HEX_REVERSE(identify, array, size)
+#define EV_PRINTF_RAW_HEX_REVERSE_NONLF(identify, array, size)
+#define EV_PRINTF_RAW_HEX_REVERSE(identify, array, size)
 #endif
 
 /*----------------------------type define--------------------------*/

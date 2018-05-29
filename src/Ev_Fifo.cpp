@@ -24,7 +24,8 @@ static uint32 roundup_power_of_two(uint32 val);
 /*-----------------------------------------------------------------*/
 Ev_Fifo::Ev_Fifo(uint32 size, uint32 wait_msec, fifo_type_t type) :
 	m_type(type),
-	m_buffer(NULL)
+	m_buffer(NULL),
+	m_iswait(false)
 {
 	if(!is_power_of_2(size))
 		size = roundup_power_of_two(size);
@@ -227,7 +228,6 @@ getm_lock_again:
 uint8 *Ev_Fifo::fifo_try_read(uint8 *buffer, uint32 *read_size, bool enough)
 {
 	uint8 *p;
-	uint32 l;
 
 	ARGS_NULL_CHECK_RN(read_size);
 	CONDITION_CHECK_RN(*read_size == 0);
@@ -257,7 +257,7 @@ uint8 *Ev_Fifo::fifo_try_read(uint8 *buffer, uint32 *read_size, bool enough)
 		__sync_synchronize();
 
 		/* first get the data from out until the end of the buffer */
-		l = MIN(*read_size, m_size - (m_out & (m_size - 1)));
+		uint32 l = MIN(*read_size, m_size - (m_out & (m_size - 1)));
 		memcpy(buffer, m_buffer + (m_out & (m_size - 1)), l);
 
 		/* then get the rest (if any) from the beginning of the buffer */

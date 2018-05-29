@@ -38,6 +38,21 @@ time_t Ev_Time::current_time()
 }
 
 
+uint64 Ev_Time::current_time_ms()
+{
+	struct timeval tv;
+	current_time(&tv);
+
+#ifdef __x86_64__
+	return tv.tv_sec*1000 + tv.tv_usec/1000;
+#else
+	uint64 sec64 = tv.tv_sec;
+	sec64 = sec64 * 1000 + tv.tv_usec/1000;
+
+	return sec64;
+#endif
+}
+
 // precise:10ms
 struct tm *Ev_Time::current_time(struct tm *t)
 {
@@ -162,6 +177,17 @@ void Ev_Time::printf_time()
 
 	EV_PRINTF_DBG("%u-%02u-%02u [%u] %02u:%02u:%02u", t.tm_year + 1900, t.tm_mon + 1, t.tm_mday, t.tm_wday,
 											t.tm_hour, t.tm_min, t.tm_sec);
+}
+
+// 2018-02-03 12:23:34
+char *Ev_Time::conver_time(uint64 sec, char *buffer)
+{
+	time_t tmpcal_ptr = sec;
+	struct tm *t = gmtime(&tmpcal_ptr);
+
+	sprintf(buffer, "%04u-%02u-%02u %02u:%02u:%02u", t->tm_year + 1900, t->tm_mon + 1, t->tm_mday,
+														t->tm_hour, t->tm_min, t->tm_sec);
+	return buffer;
 }
 
 void Ev_Time::printf_time(uint32 sec)

@@ -13,6 +13,7 @@
 /*----------------------------Head file----------------------------*/
 #include "Ev_Config.h"
 #include "Ev_Error.h"
+#include "Console_Ctrl.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -51,6 +52,7 @@ public: // api
 	virtual void info(const char *format, va_list ap) {}
 	virtual void warning(const char *format, va_list ap) {}
 	virtual void error(const char *format, va_list ap) {}
+	virtual void vprint(const char *format, va_list ap) {}
 	virtual void print(const char *format, ...) {}
 
 

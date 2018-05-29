@@ -21,5 +21,7 @@ libTinyEv_la_SOURCES = Ev_Event.cpp Ev_Fifo.cpp Ev_Handle.cpp Ev_Vector.cpp \
 					Ev_Logger_File.cpp \
 					Mod_Logger.cpp \
 					Ev_Thread.cpp \
-					Ev_Thread_Manager.cpp
+					Ev_Thread_Manager.cpp \
+					Ev_KeepLive.cpp \
+					Ev_Tools.cpp
 

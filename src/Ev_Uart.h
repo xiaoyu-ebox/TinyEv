@@ -51,7 +51,7 @@ typedef enum {
 class Ev_Uart : public Ev_Handle
 {
 public: // api
-	Ev_Uart(const char *name);
+	explicit Ev_Uart(const char *name);
 	virtual ~Ev_Uart();
 
 	virtual ev_error config(uart_br_t baud_rate, uart_db_t databits, uart_sb_t stopbits,

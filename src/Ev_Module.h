@@ -40,7 +40,8 @@ private: // api
 	friend ev_error Ev_Mod_Manager::dispense_ev_event_msg(ev_msg_info_t *ev_msg_info);
 
 private: // var
-
+	event_id_t *m_event_ids;
+	uint32 m_event_num;
 };
 
 

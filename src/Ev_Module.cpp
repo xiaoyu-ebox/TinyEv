@@ -20,14 +20,16 @@
 /*----------------------------var define---------------------------*/
 
 /*-----------------------------------------------------------------*/
-Ev_Module::Ev_Module(event_id_t *event_ids, uint32 event_num)
+Ev_Module::Ev_Module(event_id_t *event_ids, uint32 event_num) :
+	m_event_ids(event_ids),
+	m_event_num(event_num)
 {
-	Ev_Mod_Manager::instance()->register_module(this, event_ids, event_num);
+	Ev_Mod_Manager::instance()->register_module(this, m_event_ids, m_event_num);
 }
 
 Ev_Module::~Ev_Module()
 {
-
+	Ev_Mod_Manager::instance()->unregister_module_event(this, m_event_ids, m_event_num);
 }
 
 /*****************************************************************************

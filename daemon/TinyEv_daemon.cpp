@@ -25,7 +25,7 @@ static void exit_cb();
 int main(int argc, char **argv)
 {
 	// 初始化log
-	Mod_Logger::instance()->init(LOG_PRINTF_TO_CONSOLE, LOG_LEVEL_DBG);
+	Mod_Logger::instance()->init(LOG_RECORD_BY_SYSLOG, LOG_LEVEL_DBG, "TinyEv_Svr");
 
 	// 初始化事件驱动容器
 	Ev_Vector::instance()->init();

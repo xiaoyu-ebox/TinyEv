@@ -23,7 +23,7 @@ Ev_Thread::Ev_Thread() :
 	m_thread_function(NULL),
 	m_pid(0)
 {
-
+	m_name[0] = '\0';
 }
 
 Ev_Thread::~Ev_Thread()
@@ -43,7 +43,7 @@ void *thread_routine(void *args)
 {
 	Ev_Thread *obj = (Ev_Thread *)args;
 
-	EV_PRINTF_DBG("pid:%p running.", obj);
+	EV_PRINTF_DBG("<%s> running.", obj->m_name);
 
 	obj->m_exit = false;
 	obj->m_exit_code = 0;
@@ -52,12 +52,14 @@ void *thread_routine(void *args)
 		obj->m_exit_code = (unsigned long)obj->m_thread_function(obj->m_args, &obj->m_exit);
 	obj->m_exit = true;
 
-	EV_PRINTF_DBG("pid:%p exit", obj);
+	EV_PRINTF_DBG("<%s> exit:%d", obj->m_name, obj->m_exit_code);
 }
 
-pthread_t Ev_Thread::spawn(thread_function_t thread_func_cb, void *args)
+pthread_t Ev_Thread::spawn(const char *thread_name, thread_function_t thread_func_cb, void *args)
 {
 	m_args = args;
+	if(thread_name)
+		strcpy(m_name, thread_name);
 	m_thread_function = thread_func_cb;
 	pthread_create(&m_pid, NULL, thread_routine, this);
 

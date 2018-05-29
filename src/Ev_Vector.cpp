@@ -114,7 +114,6 @@ ev_error Ev_Vector::register_handle_event(Ev_Handle *handle, ev_type_t events, h
 void Ev_Vector::deregister_handle_event(Ev_Handle *handle)
 {
 	ARGS_NULL_CHECK_RV(handle);
-	CONDITION_CHECK_RV(handle->m_handle == INVALID_HANDLE);
 
 	if(handle->m_watcher) {
 		ev_io_stop(def_loop, handle->m_watcher);
@@ -163,7 +162,6 @@ void Ev_Vector::deregister_timer_event(ev_timer *watcher)
 	ev_timer_stop(def_loop, watcher);
 
 	ev_free(watcher);
-	watcher = NULL;
 }
 
 ev_error Ev_Vector::register_signal_event(int signal, ev_signal_cb_t cb)

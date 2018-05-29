@@ -46,6 +46,10 @@ public: // api
 
 	// 精度:s
 	static time_t current_time();
+
+	// 精度:ms
+	static uint64 current_time_ms();
+	
 	// 精度:10ms
 	static struct tm *current_time(struct tm *t);
 	// 精度:us
@@ -67,6 +71,9 @@ public: // api
 	static void printf_time();
 	static void printf_time(uint32 sec);
 	static void printf_uptime();
+
+	// 转换时间
+	static char *conver_time(uint64 sec, char *buffer);
 
 	// 打印当前高精度时间
 	static void printf_precise_time();

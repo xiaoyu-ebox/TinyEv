@@ -116,7 +116,7 @@ ev_error Ev_IPCCli::ipc_write_data(uint8 *data, uint32 size)
 
 ev_error Ev_IPCCli::on_ev_stream_read(uint32 size)
 {
-	uint32 msg_size, size_org = size;
+	uint32 msg_size;
 	ipc_msg_info_t *ipc_msg = (ipc_msg_info_t *)m_recv_buf;
 
 	//EV_PRINTF_DBG("--> %d", size);

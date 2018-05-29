@@ -33,7 +33,7 @@ public: // api
 	ev_error init();
 
 
-	Ev_Thread *spawn(thread_function_t thread_func_cb, void *args = NULL);
+	Ev_Thread *spawn(const char *thread_name, thread_function_t thread_func_cb, void *args = NULL);
 
 	void destroy_thread(Ev_Thread *thread);
 	void destroy_all_thread();

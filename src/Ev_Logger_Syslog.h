@@ -30,6 +30,7 @@ public: // api
 	void info(const char *format, va_list ap);
 	void warning(const char *format, va_list ap);
 	void error(const char *format, va_list ap);
+	void vprint(const char *format, va_list ap);
 	void print(const char *format, ...);
 
 public: // var

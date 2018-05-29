@@ -197,7 +197,7 @@ uint32 Ev_Http::packing_http_data(char *buffer, const char *req_path, const char
 
 		// 长度
 		len = strlen(post_args);
-		sprintf(len_buf, "%d\r\n\r\n", len);
+		sprintf(len_buf, "%u\r\n\r\n", len);
 		len_size = ((len > 9999) ? 5 : (len > 999) ? 4 : (len > 99) ? 3 : (len > 9) ? 2 : 1) + (sizeof("\r\n\r\n")-1);
 		memcpy(&buffer[total_len], len_buf, len_size);
 		total_len += len_size;

@@ -45,11 +45,11 @@ ev_error Ev_Thread_Manager::init()
 	return EV_SUCCESS;
 }
 
-Ev_Thread *Ev_Thread_Manager::spawn(thread_function_t thread_func_cb, void *args)
+Ev_Thread *Ev_Thread_Manager::spawn(const char *thread_name, thread_function_t thread_func_cb, void *args)
 {
 	Ev_Thread *thread = new Ev_Thread;
 
-	thread->spawn(thread_func_cb, args);
+	thread->spawn(thread_name, thread_func_cb, args);
 	m_threads.push_back(thread);
 
 	return thread;

@@ -45,13 +45,14 @@ private: // api
 
 	friend Ev_Thread_Manager;
 	friend void *thread_routine(void *args);
-	pthread_t spawn(thread_function_t thread_func_cb, void *args = NULL);
+	pthread_t spawn(const char *thread_name, thread_function_t thread_func_cb, void *args = NULL);
 
 private: // var
 	void *m_args;
 	thread_function_t m_thread_function;
 	unsigned long m_exit_code;
 	pthread_t m_pid;
+	char m_name[32];
 };
 
 

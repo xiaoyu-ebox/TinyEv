@@ -31,13 +31,24 @@ Ev_Event *Ev_Event::instance()
 }
 
 Ev_Event::Ev_Event() :
-	ev_msg_fifo(NULL)
+	ev_msg_fifo(NULL),
+	m_msg_thread(NULL)
 {
 	ev_msg_fifo = new Ev_Fifo(MAX_EV_MSG_FIFO_SIZE * sizeof(void *), MIN_TO_MS(60));
 }
 
 Ev_Event::~Ev_Event()
 {
+	if(ev_msg_fifo) {
+		delete ev_msg_fifo;
+		ev_msg_fifo = NULL;
+	}
+
+	if(m_msg_thread) {
+		Ev_Thread_Manager::instance()->destroy_thread(m_msg_thread);
+		m_msg_thread = NULL;
+	}
+	
 	m_instance = NULL;
 }
 
@@ -48,7 +59,7 @@ ev_error Ev_Event::init()
 
 ev_error Ev_Event::run_ev_msg_manager()
 {
-	m_msg_thread = Ev_Thread_Manager::instance()->spawn(spawn, this);
+	m_msg_thread = Ev_Thread_Manager::instance()->spawn("MSG_Manager", spawn, this);
 
 	return EV_SUCCESS;
 }

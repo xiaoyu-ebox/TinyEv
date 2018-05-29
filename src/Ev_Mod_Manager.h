@@ -44,6 +44,7 @@ public: // api
 
 	// 注册模块
 	ev_error register_module(Ev_Module *module, event_id_t *event_ids, uint32 event_num);
+	ev_error unregister_module_event(Ev_Module *module, event_id_t *event_ids, uint32 event_num);
 
 	// 分发系统事件
 	ev_error dispense_ev_event_msg(ev_msg_info_t *ev_msg_info);

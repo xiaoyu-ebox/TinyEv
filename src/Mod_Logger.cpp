@@ -112,19 +112,32 @@ void Mod_Logger::error(const char *format, ...)
 	va_end(ap);
 }
 
-void Mod_Logger::hexdump(const char *identify, const uint8 *buf, uint32 size)
+void Mod_Logger::printf(const char *format, ...)
+{
+	va_list ap;
+	va_start(ap, format);
+	m_obj_logger->vprint(format, ap);
+	va_end(ap);
+}
+
+void Mod_Logger::hexdump(const char *identify, const uint8 *buf, uint32 size, bool timestamp, bool lf)
 {
 	char temp_buf[256 * 3 + 1];
 	char *p_temp_buf;
-	uint8 temp_size;
+	uint16 temp_size;
 
 	if(m_type == LOG_RECORD_BY_SYSLOG) {
 		m_obj_logger->print(identify);
 	}
 	else {
-		struct tm t;
-		Ev_Time::current_time(&t);
-		m_obj_logger->print("[%02u-%02u %u:%u:%u]%s", t.tm_mon + 1, t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec, identify);
+		if(timestamp) {
+			struct tm t;
+			Ev_Time::current_time(&t);
+			m_obj_logger->print(CTRL_F_GREEN "[%02u-%02u %02u:%02u:%02u]" CTRL_CLOSE_ALL "%s ", t.tm_mon + 1, t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec, identify);
+		}
+		else {
+			m_obj_logger->print("%s ", identify);
+		}
 	}
 
 	while(size) {
@@ -140,6 +153,46 @@ void Mod_Logger::hexdump(const char *identify, const uint8 *buf, uint32 size)
 		m_obj_logger->print(temp_buf);
 	}
 
-	m_obj_logger->print("\n");
+	if(lf)
+		m_obj_logger->print("\n");
 }
+
+void Mod_Logger::hexdump_reverse(const char *identify, const uint8 *buf, uint32 size, bool timestamp, bool lf)
+{
+	char temp_buf[256 * 3 + 1];
+	char *p_temp_buf;
+	uint8 temp_size;
+
+	if(m_type == LOG_RECORD_BY_SYSLOG) {
+		m_obj_logger->print(identify);
+	}
+	else {
+		if(timestamp) {
+			struct tm t;
+			Ev_Time::current_time(&t);
+			m_obj_logger->print(CTRL_F_GREEN "[%02u-%02u %02u:%02u:%02u]" CTRL_CLOSE_ALL "%s ", t.tm_mon + 1, t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec, identify);
+		}
+		else {
+			m_obj_logger->print("%s ", identify);
+		}
+	}
+
+	buf += (size-1);
+	while(size) {
+		p_temp_buf = temp_buf;
+		temp_size = size > 256 ? 256 : size;
+		size -= temp_size;
+
+		while(temp_size--) {
+			sprintf(p_temp_buf, "%02x ", *buf--);
+			p_temp_buf += 3;
+		}
+		*p_temp_buf = '\0';
+		m_obj_logger->print(temp_buf);
+	}
+
+	if(lf)
+		m_obj_logger->print("\n");
+}
+
 

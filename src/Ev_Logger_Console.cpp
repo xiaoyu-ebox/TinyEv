@@ -22,8 +22,13 @@ void Ev_Logger_Console::dbg(const char *format, va_list ap)
 {
 	struct tm t;
 	Ev_Time::current_time(&t);
-	printf("\033[32m[%02u-%02u %02u:%02u:%02u]\033[0m", t.tm_mon + 1, t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec);
+	printf(CTRL_F_GREEN "[%02u-%02u %02u:%02u:%02u]" CTRL_CLOSE_ALL, t.tm_mon + 1, t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec);
 
+	vprintf(format, ap);
+}
+
+void Ev_Logger_Console::vprint(const char *format, va_list ap)
+{
 	vprintf(format, ap);
 }
 

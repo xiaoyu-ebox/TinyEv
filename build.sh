@@ -9,5 +9,5 @@ if [ $# == 0 ]; then
 	./configure --enable-shared --disable-static
 fi
 
-make CXXFLAGS="-std=c++11 " && sudo make install
+make -j8 CXXFLAGS="-std=c++11 " && sudo make install
 

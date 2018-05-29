@@ -14,6 +14,13 @@
 #include "Ev_Logger.h"
 
 /*----------------------------macro file---------------------------*/
+#define __DBG								""
+#define __INFO								""
+#define __WARN								""
+#define __ERR								""
+
+#define MOD_COLOR_S							CTRL_F_BLUE
+#define MOD_COLOR_E							CTRL_CLOSE_ALL
 
 /*----------------------------type define--------------------------*/
 
@@ -28,15 +35,15 @@ public: // api
 	static Mod_Logger *instance();
 
 	/*****************************************************************************
-	 * º¯Êı¹¦ÄÜ  : logger³õÊ¼»¯º¯Êı
-	 * ÊäÈë²ÎÊı  : type = LOG_PRINTF_TO_CONSOLE  logĞ´Èë·½Ê½
-	             level = LOG_LEVEL_INFO        logĞ´Èë¼¶±ğ
-	             *args = NULL             	   ¸½Êô²ÎÊı
-	               		µ±type = LOG_PRINTF_TO_CONSOLEÊ±£ºargsÎŞÓÃ
-	               		µ±type = LOG_RECORD_BY_SYSLOGÊ±£ºargsÎªloggerµÄ±êÊ¶
-	               		µ±type = LOG_RECORD_TO_FILE£ºargsÎªÎÄ¼şÂ·¾¶
-	 * Êä³ö²ÎÊı  : ÎŞ
-	 * ·µ »Ø Öµ  : ev_error
+	 * å‡½æ•°åŠŸèƒ½  : loggeråˆå§‹åŒ–å‡½æ•°
+	 * è¾“å…¥å‚æ•°  : type = LOG_PRINTF_TO_CONSOLE  logå†™å…¥æ–¹å¼
+	             level = LOG_LEVEL_INFO        logå†™å…¥çº§åˆ«
+	             *args = NULL             	   é™„å±å‚æ•°
+	               		å½“type = LOG_PRINTF_TO_CONSOLEæ—¶ï¼šargsæ— ç”¨
+	               		å½“type = LOG_RECORD_BY_SYSLOGæ—¶ï¼šargsä¸ºloggerçš„æ ‡è¯†
+	               		å½“type = LOG_RECORD_TO_FILEï¼šargsä¸ºæ–‡ä»¶è·¯å¾„
+	 * è¾“å‡ºå‚æ•°  : æ— 
+	 * è¿” å› å€¼  : ev_error
 	*****************************************************************************/
 	ev_error init(log_record_t type = LOG_PRINTF_TO_CONSOLE, log_level_t level = LOG_LEVEL_INFO, const char *args = NULL);
 
@@ -44,8 +51,10 @@ public: // api
 	void info(const char *format, ...);
 	void warning(const char *format, ...);
 	void error(const char *format, ...);
-	void hexdump(const char *identify, const uint8 *buf, uint32 size);
-
+	void printf(const char *format, ...);
+	void hexdump(const char *identify, const uint8 *buf, uint32 size, bool timestamp = true, bool lf = true);
+	void hexdump_reverse(const char *identify, const uint8 *buf, uint32 size, bool timestamp = true, bool lf = true);
+	
 	void set_level(log_level_t level) {m_level = level;}
 
 public: // var

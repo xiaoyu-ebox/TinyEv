@@ -22,7 +22,7 @@ class Ev_Vector;
 class EV_PrivateData
 {
 public: // api
-	EV_PrivateData() {}
+	EV_PrivateData() : m_priv(0) {}
 	virtual ~EV_PrivateData() {}
 
 public: // var

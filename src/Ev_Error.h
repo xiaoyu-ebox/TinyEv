@@ -40,23 +40,29 @@ typedef uint32				ev_error;
 enum {
 	EV_SUCCESS = ERROR_BASE,			// 成功
 	EV_UNKNOW_ERR,						// 未知错误
+	EV_LOGIN_SUCCESS,					// 登陆成功
 	EV_CONTINUE,						// 继续
 	EV_UNHANDLE,						// 未处理事件
+	EV_DONT_NEED_HANDLE,				// 无需处理
 	EV_ARGS_ERR,						// 参数错误
 	EV_ARGS_GET_ERR,					// 参数获取错误
 	EV_ARGS_SET_ERR,             		// 参数设置错误
 	EV_NOMEM,							// 内存不足
 	EV_STAT_ERR,						// 状态错误
+	EV_PERMISSION_ERR,					// 权限不足
 	EV_OBJ_CREATE_ERR,					// 对象创建错误
 	EV_DATA_PARSE_ERR,					// 数据解析错误
 	EV_CONTAINER_EMPTY,					// 容器已空
 	EV_CONTAINER_FULL,					// 容器已满
 	EV_REGISTER_ERR,					// 注册失败
 	EV_CTRL_ERR,						// 控制错误
+	EV_OPT_ERR,							// 操作错误
 	EV_INIT_ERR,						// 初始化错误
 	EV_NOT_INIT,						// 未初始化
 	EV_ALREADY_INIT,					// 已经初始化了
+	EV_AUTH_FAILED,						// 认证失败
 	EV_NOT_FOUND,						// 没有找到
+	EV_KEEPLIVE_TIMEOUT,				// 在线超时
 	EV_RW_ERR,							// 读写错误
 	EV_RW_TIMEOUT,						// 读写超时
 	EV_WATCH_EVENT_ERR,					// 监听事件错误

@@ -25,6 +25,7 @@ public: // api
 	~Ev_Logger_Console() {}
 
 	void dbg(const char *format, va_list ap);
+	void vprint(const char *format, va_list ap);
 	void print(const char *format, ...);
 
 public: // var

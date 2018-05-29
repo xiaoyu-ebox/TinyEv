@@ -21,7 +21,7 @@
 class Ev_SocketSvr : public Ev_Handle
 {
 public: // api
-	Ev_SocketSvr(socket_type_t type = SOCKET_TCP_SERVER);
+	explicit Ev_SocketSvr(socket_type_t type = SOCKET_TCP_SERVER);
 	virtual ~Ev_SocketSvr();
 
 	ev_error create_host_service(const char *addr, uint32 args = 0);
